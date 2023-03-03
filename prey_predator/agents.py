@@ -19,7 +19,7 @@ class Sheep(RandomWalker):
     
     def kill(self):
         self.model.grid.remove_agent(self)
-        self.model.remove_agent(self)
+        # self.model.remove_agent(self)
         self.model.schedule.remove(self)
 
     def step(self):
@@ -67,7 +67,7 @@ class Wolf(RandomWalker):
 
     def kill(self):
         self.model.grid.remove_agent(self)
-        self.model.remove_agent(self)
+        # self.model.remove_agent(self)
         self.model.schedule.remove(self)
 
     def step(self):
@@ -112,6 +112,7 @@ class GrassPatch(Agent):
         self.fully_grown = fully_grown
         self.countdown = countdown
         self.model = model
+        self.energy = None
 
     def step(self):
         if not self.fully_grown:
