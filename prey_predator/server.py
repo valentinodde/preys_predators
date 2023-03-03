@@ -4,6 +4,7 @@ from mesa.visualization.UserParam import UserSettableParameter
 
 from prey_predator.agents import Wolf, Sheep, GrassPatch
 from prey_predator.model import WolfSheep
+import os
 
 
 def wolf_sheep_portrayal(agent):
@@ -18,11 +19,15 @@ def wolf_sheep_portrayal(agent):
     if type(agent) is Sheep:
         portrayal["Color"] = "white"
         portrayal["r"] = 0.5
+        portrayal["Shape"] = f"{os.path.dirname(os.path.realpath(__file__))}/sheep.png"
+    
+
         # ... to be completed
 
     elif type(agent) is Wolf:
         portrayal["Color"] = "black"
         portrayal["r"] = 0.5
+        portrayal["Shape"] = f"{os.path.dirname(os.path.realpath(__file__))}/wolf.png"
 
     elif type(agent) is GrassPatch:
         portrayal["Shape"] = "rect" 
@@ -30,8 +35,11 @@ def wolf_sheep_portrayal(agent):
         portrayal["w"] = 1
         if agent.fully_grown:
             portrayal["Color"] = "rgb(19,109,21)"
+            portrayal["Shape"] = f"{os.path.dirname(os.path.realpath(__file__))}/grass2.png"
+
+
         else:
-            portrayal["Color"] = "rgb(65,152,10)"
+            portrayal["Color"] = "rgb(55,217,128)"
 
     return portrayal
 
