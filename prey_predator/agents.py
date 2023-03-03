@@ -1,6 +1,6 @@
 from mesa import Agent
 from prey_predator.random_walk import RandomWalker
-
+import random
 
 class Sheep(RandomWalker):
     """
@@ -14,13 +14,40 @@ class Sheep(RandomWalker):
     def __init__(self, unique_id, pos, model, moore, energy=None):
         super().__init__(unique_id, pos, model, moore=moore)
         self.energy = energy
+        self.model = model
+        #self.pos = pos
 
     def step(self):
         """
         A model step. Move, then eat grass and reproduce.
         """
+        # handle energy
+        self.energy = self.energy - 1
+        if self.energy <= 0:
+            self.model.remove_agent(self)
+            self.model.schedule.remove(self)
+            #self.kill_agents.remove(self)
+            return
+
+        # move
         self.random_move()
-        # ... to be completed
+
+        # eat grass
+        agents_cell = self.model.grid.get_cell_list_contents([self.pos])
+        for agent in agents_cell:
+            if isinstance(agent, GrassPatch):
+                if agent.fully_grown:
+                    agent.fully_grown = False
+                    agent.countdown = self.model.grass_regrowth_time
+                    self.energy = self.energy + self.model.sheep_gain_from_food
+        test = random.random()
+
+        # reproduce
+        if test < self.model.sheep_reproduce:
+            self.model.create_sheep(self.pos)
+        
+        
+
 
 
 class Wolf(RandomWalker):
@@ -35,8 +62,21 @@ class Wolf(RandomWalker):
         self.energy = energy
 
     def step(self):
+        # move
         self.random_move()
-        # ... to be completed
+
+        # eat sheep
+        agents_cell = self.model.grid.get_cell_list_contents([self.pos])
+        for agent in agents_cell:
+            if isinstance(agent, Sheep):
+                agent.
+                self.energy = self.energy + self.model.wolf_gain_from_food
+                break
+        test = random.random()
+
+        # reproduce
+        if test < self.model.sheep_reproduce:
+            self.model.create_sheep(self.pos)
 
 
 class GrassPatch(Agent):
@@ -54,6 +94,8 @@ class GrassPatch(Agent):
         """
         super().__init__(unique_id, model)
         # ... to be completed
+        self.fully_grown = fully_grown
+        self.countdown = countdown
 
     def step(self):
         # ... to be completed
