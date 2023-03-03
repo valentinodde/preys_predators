@@ -8,7 +8,7 @@ Replication of the model found in NetLogo:
     Center for Connected Learning and Computer-Based Modeling,
     Northwestern University, Evanston, IL.
 """
-
+import uuid
 from mesa import Model
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
@@ -90,13 +90,35 @@ class WolfSheep(Model):
             }
         )
 
+        for i in range (initial_sheep):
+            pos = (self.random.randrange(self.grid.width), self.random.randrange(self.grid.height))
+            self.create_sheep(self, pos)
+        
+        for i in range (initial_wolves):
+            pos = (self.random.randrange(self.grid.width), self.random.randrange(self.grid.height))
+            self.create_wolf(self, pos)
+
+        for x in range (width):
+            for y in range (height):
+                self.create_grass(self, (x,y))
+            
         # Create sheep:
-        # ... to be completed
+    def create_sheep(self,pos):
+        a = Sheep(str(uuid.UUID), pos, self, self.moore, energy =  self.initial_sheep)
+        self.schedule.add(a)
+        self.grid.place_agent(a, pos)
 
         # Create wolves
-        # ... to be completed
+    def create_wolf(self,pos):
+        a = Wolf(str(uuid.UUID), pos, self, self.moore, energy =  self.initial_wolf)
+        self.schedule.add(a)
+        self.grid.place_agent(a, pos)
 
         # Create grass patches
+    def create_grass(self,pos):
+        a = GrassPatch(str(uuid.UUID), pos, self, fully_grown = True, countdown = 0)
+        self.schedule.add(a)
+        self.grid.place_agent(a, pos)
         # ... to be completed
 
     def step(self):
