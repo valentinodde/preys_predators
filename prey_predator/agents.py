@@ -114,6 +114,6 @@ class GrassPatch(Agent):
     def step(self):
         if not self.fully_grown:
             self.countdown = self.countdown - 1
-            if self.countdown >= self.model.grass_regrowth_time:
+            if self.countdown <= 0:
                 self.fully_grown = True
         # ... to be completed
