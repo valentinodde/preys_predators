@@ -10,16 +10,19 @@ def wolf_sheep_portrayal(agent):
     if agent is None:
         return
 
-    portrayal = {}
+    portrayal = {"Shape": "circle",
+                 "Filled": "true",
+                 "r": 0.5}
 
     if type(agent) is Sheep:
+        portrayal["Color"] = "white"
         # ... to be completed
 
     elif type(agent) is Wolf:
-        # ... to be completed
+        portrayal["Color"] = "black"
 
     elif type(agent) is GrassPatch:
-        # ... to be completed
+        portrayal["Color"] = "green"
 
     return portrayal
 
