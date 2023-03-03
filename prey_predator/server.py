@@ -17,25 +17,41 @@ def wolf_sheep_portrayal(agent):
 
     if type(agent) is Sheep:
         portrayal["Color"] = "white"
+        portrayal["r"] = 0.5
         # ... to be completed
 
     elif type(agent) is Wolf:
         portrayal["Color"] = "black"
+        portrayal["r"] = 0.5
 
     elif type(agent) is GrassPatch:
-        portrayal["Color"] = "green"
+        portrayal["Shape"] = "rect" 
+        portrayal["h"] = 1
+        portrayal["w"] = 1
+        if agent.fully_grown:
+            portrayal["Color"] = "rgb(19,109,21)"
+        else:
+            portrayal["Color"] = "rgb(65,152,10)"
 
     return portrayal
 
 
 canvas_element = CanvasGrid(wolf_sheep_portrayal, 20, 20, 500, 500)
 chart_element = ChartModule(
-    [{"Label": "Wolves", "Color": "#AA0000"}, {"Label": "Sheep", "Color": "#666666"}]
+    [{"Label": "Wolves", "Color": "#AA0000"}, {"Label": "Sheep", "Color": "#666666"}],
+    #[{"Label": "Energy_per_wolf", "Color": "#AA0000"}],
+    data_collector_name='datacollector'
 )
 
-model_params = {
-    # ... to be completed
-}
+model_params = {"initial_wolves": UserSettableParameter("slider", "Initial wolves", 10, 1, 100, 1),
+                "initial_sheep": UserSettableParameter("slider", "Initial sheep", 30, 1, 100, 1),
+                "initial_wolf_energy": UserSettableParameter("slider", "Initial wolf Energy", 10, 1, 100, 1),
+                "initial_sheep_energy": UserSettableParameter("slider", "Initial sheep Energy", 4, 1, 100, 1),
+                "grass_regrowth_time": UserSettableParameter("slider", "Grass regrowth time", 30, 1, 100, 1),
+                "sheep_gain_from_food": UserSettableParameter("slider", "Sheep gain from food", 4, 1, 100, 1),
+                "wolf_gain_from_food": UserSettableParameter("slider", "Wolf gain from food", 20, 1, 100, 1),
+                "wolf_reproduce": UserSettableParameter("slider", "Wolf reproduce rate", 0.05, 0, 1, 0.01),
+                "sheep_reproduce": UserSettableParameter("slider", "Sheep reproduce rate", 0.04, 0, 1, 0.01),}
 
 server = ModularServer(
     WolfSheep, [canvas_element, chart_element], "Prey Predator Model", model_params

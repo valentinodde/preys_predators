@@ -73,3 +73,14 @@ class RandomActivationByBreed(RandomActivation):
         Returns the current number of agents of certain breed in the queue.
         """
         return len(self.agents_by_breed[breed_class].values())
+
+
+    def get_energy_count(self, breed_class):
+        """
+        Returns the current number of agents of certain breed in the queue.
+        """
+        L = self.agents_by_breed[breed_class].values()
+        s = 0
+        for agent in L:
+            s = s + agent.energy
+        return s

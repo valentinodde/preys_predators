@@ -36,6 +36,9 @@ class WolfSheep(Model):
     grass_regrowth_time = 30
     sheep_gain_from_food = 4
 
+    initial_wolf_energy = 10
+    initial_sheep_energy = 4
+
     description = (
         "A model for simulating wolf and sheep (predator-prey) ecosystem modelling."
     )
@@ -52,6 +55,8 @@ class WolfSheep(Model):
         grass=False,
         grass_regrowth_time=30,
         sheep_gain_from_food=4,
+        initial_wolf_energy=10,
+        initial_sheep_energy=4
     ):
         """
         Create a new Wolf-Sheep model with the given parameters.
@@ -79,6 +84,8 @@ class WolfSheep(Model):
         self.grass = grass
         self.grass_regrowth_time = grass_regrowth_time
         self.sheep_gain_from_food = sheep_gain_from_food
+        self.initial_wolf_energy = initial_wolf_energy
+        self.initial_sheep_energy = initial_sheep_energy
 
         self.schedule = RandomActivationByBreed(self)
         self.grid = MultiGrid(self.height, self.width, torus=True)
@@ -86,6 +93,7 @@ class WolfSheep(Model):
             {
                 "Wolves": lambda m: m.schedule.get_breed_count(Wolf),
                 "Sheep": lambda m: m.schedule.get_breed_count(Sheep),
+                "Energy_per_wolf" : lambda m: m.schedule.get_energy_count(Wolf) / (m.schedule.get_breed_count(Wolf)+1),
             }
         )
 
@@ -100,18 +108,19 @@ class WolfSheep(Model):
         for x in range (width):
             for y in range (height):
                 self.create_grass((x,y))
+                pass
 
-        self.datacollector = DataCollector(agent_reporters={"energy": "energy"})
+        #self.datacollector = DataCollector(agent_reporters={"energy": "energy"})
             
         # Create sheep:
     def create_sheep(self,pos):
-        a = Sheep(self.next_id(), pos, self, True, energy =  self.initial_sheep)
+        a = Sheep(self.next_id(), pos, self, True, energy =  self.initial_sheep_energy)
         self.schedule.add(a)
         self.grid.place_agent(a, pos)
 
         # Create wolves
     def create_wolf(self,pos):
-        a = Wolf(self.next_id(), pos, self, True, energy =  self.initial_wolves)
+        a = Wolf(self.next_id(), pos, self, True, energy =  self.initial_wolf_energy)
         self.schedule.add(a)
         self.grid.place_agent(a, pos)
 

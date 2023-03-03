@@ -108,7 +108,6 @@ class GrassPatch(Agent):
             countdown: Time for the patch of grass to be fully grown again
         """
         super().__init__(unique_id, model)
-        # ... to be completed
         self.fully_grown = fully_grown
         self.countdown = countdown
         self.model = model
@@ -119,4 +118,3 @@ class GrassPatch(Agent):
             self.countdown = self.countdown - 1
             if self.countdown <= 0:
                 self.fully_grown = True
-        # ... to be completed
