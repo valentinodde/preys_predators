@@ -16,6 +16,10 @@ class Sheep(RandomWalker):
         self.energy = energy
         self.model = model
         #self.pos = pos
+    
+    def kill(self):
+        self.model.remove_agent(self)
+        self.model.schedule.remove(self)
 
     def step(self):
         """
@@ -24,9 +28,7 @@ class Sheep(RandomWalker):
         # handle energy
         self.energy = self.energy - 1
         if self.energy <= 0:
-            self.model.remove_agent(self)
-            self.model.schedule.remove(self)
-            #self.kill_agents.remove(self)
+            self.kill()
             return
 
         # move
@@ -40,10 +42,10 @@ class Sheep(RandomWalker):
                     agent.fully_grown = False
                     agent.countdown = self.model.grass_regrowth_time
                     self.energy = self.energy + self.model.sheep_gain_from_food
-        test = random.random()
+        reproduction_rand = random.random()
 
         # reproduce
-        if test < self.model.sheep_reproduce:
+        if reproduction_rand < self.model.sheep_reproduce:
             self.model.create_sheep(self.pos)
         
         
@@ -60,8 +62,19 @@ class Wolf(RandomWalker):
     def __init__(self, unique_id, pos, model, moore, energy=None):
         super().__init__(unique_id, pos, model, moore=moore)
         self.energy = energy
+        self.model = model
+
+    def kill(self):
+        self.model.remove_agent(self)
+        self.model.schedule.remove(self)
 
     def step(self):
+        # handle energy
+        self.energy = self.energy - 1
+        if self.energy <= 0:
+            self.kill()
+            return
+        
         # move
         self.random_move()
 
@@ -69,14 +82,14 @@ class Wolf(RandomWalker):
         agents_cell = self.model.grid.get_cell_list_contents([self.pos])
         for agent in agents_cell:
             if isinstance(agent, Sheep):
-                agent.
+                agent.kill()
                 self.energy = self.energy + self.model.wolf_gain_from_food
                 break
         test = random.random()
 
         # reproduce
-        if test < self.model.sheep_reproduce:
-            self.model.create_sheep(self.pos)
+        if test < self.model.wolf_reproduce:
+            self.model.create_wolf(self.pos)
 
 
 class GrassPatch(Agent):
@@ -96,6 +109,11 @@ class GrassPatch(Agent):
         # ... to be completed
         self.fully_grown = fully_grown
         self.countdown = countdown
+        self.model = model
 
     def step(self):
+        if not self.fully_grown:
+            self.countdown = self.countdown - 1
+            if self.countdown >= self.model.grass_regrowth_time:
+                self.fully_grown = True
         # ... to be completed
