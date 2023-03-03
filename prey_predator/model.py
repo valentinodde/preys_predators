@@ -130,6 +130,8 @@ class WolfSheep(Model):
         # ... to be completed
 
     def run_model(self, step_count=200):
+        for x in range(step_count):
+            self.step()
 
         # ... to be completed
 

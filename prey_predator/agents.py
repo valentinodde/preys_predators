@@ -18,6 +18,7 @@ class Sheep(RandomWalker):
         #self.pos = pos
     
     def kill(self):
+        self.model.grid.remove_agent(self)
         self.model.remove_agent(self)
         self.model.schedule.remove(self)
 
@@ -65,6 +66,7 @@ class Wolf(RandomWalker):
         self.model = model
 
     def kill(self):
+        self.model.grid.remove_agent(self)
         self.model.remove_agent(self)
         self.model.schedule.remove(self)
 
