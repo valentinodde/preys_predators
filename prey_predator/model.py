@@ -8,7 +8,6 @@ Replication of the model found in NetLogo:
     Center for Connected Learning and Computer-Based Modeling,
     Northwestern University, Evanston, IL.
 """
-import uuid
 from mesa import Model
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
@@ -101,25 +100,26 @@ class WolfSheep(Model):
         for x in range (width):
             for y in range (height):
                 self.create_grass(self, (x,y))
+
+        self.datacollector = DataCollector(agent_reporters={"energy": "energy"})
             
         # Create sheep:
     def create_sheep(self,pos):
-        a = Sheep(str(uuid.UUID), pos, self, self.moore, energy =  self.initial_sheep)
+        a = Sheep(self.next_id(), pos, self, self.moore, energy =  self.initial_sheep)
         self.schedule.add(a)
         self.grid.place_agent(a, pos)
 
         # Create wolves
     def create_wolf(self,pos):
-        a = Wolf(str(uuid.UUID), pos, self, self.moore, energy =  self.initial_wolf)
+        a = Wolf(self.next_id(), pos, self, self.moore, energy =  self.initial_wolf)
         self.schedule.add(a)
         self.grid.place_agent(a, pos)
 
         # Create grass patches
     def create_grass(self,pos):
-        a = GrassPatch(str(uuid.UUID), pos, self, fully_grown = True, countdown = 0)
+        a = GrassPatch(self.next_id(), pos, self, fully_grown = True, countdown = 0)
         self.schedule.add(a)
         self.grid.place_agent(a, pos)
-        # ... to be completed
 
     def step(self):
         self.schedule.step()
