@@ -109,8 +109,6 @@ class WolfSheep(Model):
             for y in range (height):
                 self.create_grass((x,y))
                 pass
-
-        #self.datacollector = DataCollector(agent_reporters={"energy": "energy"})
             
         # Create sheep:
     def create_sheep(self,pos):
@@ -135,8 +133,6 @@ class WolfSheep(Model):
 
         # Collect data
         self.datacollector.collect(self)
-
-        # ... to be completed
 
     def run_model(self, step_count=200):
         for x in range(step_count):

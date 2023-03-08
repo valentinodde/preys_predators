@@ -35,7 +35,7 @@ def wolf_sheep_portrayal(agent):
         portrayal["w"] = 1
         if agent.fully_grown:
             portrayal["Color"] = "rgb(19,109,21)"
-            portrayal["Shape"] = f"{os.path.dirname(os.path.realpath(__file__))}/grass2.png"
+            portrayal["Shape"] = f"{os.path.dirname(os.path.realpath(__file__))}/grass.png"
 
 
         else:
